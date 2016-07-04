@@ -4,10 +4,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
+import datetime
 
 engine = create_engine('sqlite:///database.db', echo=False)
 
 Base = declarative_base()
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -16,25 +18,23 @@ class User(Base):
     name = Column(String)
     fullname = Column(String)
     password = Column(String)
+    sign_up = Column(sqlalchemy.DATETIME)
 
     def __repr__(self):
         return "<User(name='%s', fullname='%s', password='%s')>" % (
             self.name, self.fullname, self.password)
+"""
+Base.metadata.create_all(engine)
 
-#Base.metadata.create_all(engine)
+Session = sessionmaker()
+Session.configure(bind=engine)
+session = Session()
+session.add_all([User(name='wendy', fullname='Wendy Williams', password='foobar', sign_up=datetime.datetime.now()),
+                 User(name='mary', fullname='Mary Contrary', password='xxg527', sign_up=datetime.datetime.now()),
+                 User(name='fred', fullname='Fred Flinstone', password='blah', sign_up=datetime.datetime.now())])
+session.commit()
 
 
-#ed_user = User(name='ed', fullname='Ed Jones', password='edspassword')
-#Session = sessionmaker()
-#Session.configure(bind=engine)
-#session = Session()
-#session.add(ed_user)
-
-
-#session.add_all([User(name='wendy', fullname='Wendy Williams', password='foobar'),
-#                 User(name='mary', fullname='Mary Contrary', password='xxg527'),
-#                 User(name='fred', fullname='Fred Flinstone', password='blah')])
-#
 #ed_user.password = 'f8s7ccs'
 
 #session.dirty
@@ -66,3 +66,4 @@ session = Session()
 updater = session.query(User).filter_by(name='ed').first()
 updater.name='edward'
 session.commit()
+"""
